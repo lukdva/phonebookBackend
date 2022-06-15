@@ -52,7 +52,18 @@ app.delete('/api/persons/:id', (req, res) => {
     res.status(204).end();
 });
 app.post('/api/persons', (req, res) => {
-
+    const { name, number} = req.body;
+    if (!name){
+        return res.status(400).send({error:"Name cannot be empty"})
+    }
+    if (!number) {
+        return res.status(400).send({error:"Number cannot be empty"})
+    }
+    const isNameSame = persons.find(person => person.name === name)
+    if (isNameSame)
+    {
+        return res.status(400).send({error:"Name must be unique"})
+    }
     const person = {
         id:generateId(),
         ...req.body};
