@@ -1,0 +1,14 @@
+DELETE https://hidden-badlands-44117.herokuapp.com/api/persons/512294
+
+###
+
+POST https://hidden-badlands-44117.herokuapp.com/api/persons
+Content-Type:application/json
+
+{
+    "name":"Buzz Lightyear",
+    "number":"123-456-789"
+}
+###
+
+GET https://hidden-badlands-44117.herokuapp.com/api/persons
