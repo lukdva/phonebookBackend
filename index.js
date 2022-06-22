@@ -1,7 +1,8 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
-
+const Person = require('./models/person.js')
 app.use(express.static('build'))
 app.use(express.json())
 
@@ -37,7 +38,10 @@ const generateId = () => {
 }
 
 app.get('/api/persons', (req, res) => {
-    res.json(persons);
+    Person.find({})
+    .then(response => {
+        res.json(response);
+    })    
 })
 app.get('/info', (req, res) => {
     res.send(

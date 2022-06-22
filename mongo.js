@@ -5,9 +5,7 @@ if (process.argv.length < 3) {
     process.exit(1)
 }
 
-const password = process.argv[2];
-console.log(password)
-const url = `mongodb+srv://phonebook:${password}@cluster0.njpkrqz.mongodb.net/Phonebook?retryWrites=true&w=majority`;
+const url = process.env.MONGO_URI;
 
 const personSchema = new mongoose.Schema({
     name: String,
