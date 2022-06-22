@@ -1,4 +1,4 @@
-DELETE http://localhost:3001/api/persons/qwtt
+DELETE http://localhost:3001/api/persons/62b325cd7af3886876928cf8
 
 ###
 
@@ -6,7 +6,7 @@ POST http://localhost:3001/api/persons
 Content-Type:application/json
 
 {
-    "name":"Buzzd Lightyear",
+    "name":"Anna Montanas",
     "number":"123-456-789"
 }
 ###
@@ -25,6 +25,6 @@ PUT http://localhost:3001/api/persons/62b2d63849b0c06355a86ef9
 Content-Type:application/json
 
 {
-    "name":"Buzzd Lightyear",
+    "name":"Ken Man",
     "number":"123-456-789-212"
 }

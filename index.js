@@ -80,18 +80,21 @@ app.post('/api/persons', (req, res, next) => {
     const person = new Person({
         ...req.body
     })
-    person.save()
-    .then(savedPerson => {
-        res.send(savedPerson);
+    Person.init().then(() => {
+        person.save()
+        .then(savedPerson => {
+            res.send(savedPerson);
+        })
+        .catch((err) => {
+            next(err);
+        })
     })
-    .catch((err) => {
-        next(err);
-    })
+    
 });
 app.put('/api/persons/:id', (req, res, next) => {
     const id = req.params.id;
     console.log("req body", req.body)
-    Person.findByIdAndUpdate(id, req.body, { new:true })
+    Person.findByIdAndUpdate(id, req.body, { new:true, runValidators:true})
     .then( result => {
         console.log("result", result);
         res.json(result);
@@ -100,16 +103,23 @@ app.put('/api/persons/:id', (req, res, next) => {
         next(err);
     })
 })
+
 const unknownEndpoint = (request, response) => {
     response.status(404).send({error:"Endpoint not found"})    
 }
 const errorHandler = (err, req, res, next) => {
-    console.error(err.message);
+    // console.error(err.message);
+    console.log("error.name", err)
     if(err.name === 'CastError')
     {
         return res.status(400).send({error: 'Malformatted id'})
     }
-    next(err); //Forwards to default error handler
+    if(err.code === 11000)
+    {
+        return res.status(400).send({error:err.message})
+    }
+    res.status(500).send({error:err.message})
+    // next(err); //Forwards to default error handler
 }
 app.use(unknownEndpoint);
 app.use(errorHandler);
