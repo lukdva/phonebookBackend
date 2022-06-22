@@ -24,7 +24,7 @@ const personSchema = new mongoose.Schema({
         minLength: 8,
         required: true,
         validate: {
-            validator: v => { /\d{2,3}-\d{1,}/.test(v); },
+            validator: v => /\d{2,3}-\d{1,}/.test(v),
             message: 'Incorrect phone format, should be DD-DDDDD... or DDD-DDDDD...'
         }
     }
