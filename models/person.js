@@ -20,7 +20,7 @@ const personSchema = new mongoose.Schema({
 personSchema.set('toJSON', {
     versionKey: false,
     transform: (doc, ret) => {
-        ret.id = doc._id;
+        ret.id = doc._id.toString();
         delete ret._id;
     }
 });
