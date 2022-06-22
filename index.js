@@ -77,6 +77,7 @@ app.delete('/api/persons/:id', (req, res, next) => {
     })
 });
 app.post('/api/persons', (req, res, next) => {
+
     const person = new Person({
         ...req.body
     })
@@ -88,7 +89,18 @@ app.post('/api/persons', (req, res, next) => {
         next(err);
     })
 });
-
+app.put('/api/persons/:id', (req, res, next) => {
+    const id = req.params.id;
+    console.log("req body", req.body)
+    Person.findByIdAndUpdate(id, req.body, { new:true })
+    .then( result => {
+        console.log("result", result);
+        res.json(result);
+    })
+    .catch(err => {
+        next(err);
+    })
+})
 const unknownEndpoint = (request, response) => {
     response.status(404).send({error:"Endpoint not found"})    
 }
