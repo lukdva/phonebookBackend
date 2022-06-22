@@ -37,11 +37,14 @@ const generateId = () => {
     return Math.round(Math.random()*1000000);
 }
 
-app.get('/api/persons', (req, res) => {
+app.get('/api/persons', (req, res, next) => {
     Person.find({})
     .then(response => {
         res.json(response);
-    })    
+    })
+    .catch((err) => {
+        next(err);
+    })
 })
 app.get('/info', (req, res) => {
     res.send(
@@ -49,25 +52,31 @@ app.get('/info', (req, res) => {
          <p>${Date()}</p>`
          );
 })
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
     const id = Number(req.params.id);
     const person = persons.find(person =>  person.id === id);
     if(!person) {
-        return res.status(404).end();
+        return res.status(404).end()
+        .catch((err) => {
+            next(err);
+        });
     }
-    res.json(person);
+    res.json(person)
+    .catch((err) => {
+        next(err);
+    });
 })
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
     const id = req.params.id;
     Person.findByIdAndRemove(id)
     .then(result => {
         res.status(204).end();
     })
     .catch((err) => {
-        console.log(err);
+        next(err);
     })
 });
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
     const person = new Person({
         ...req.body
     })
@@ -75,7 +84,25 @@ app.post('/api/persons', (req, res) => {
     .then(savedPerson => {
         res.send(savedPerson);
     })
+    .catch((err) => {
+        next(err);
+    })
 });
+
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({error:"Endpoint not found"})    
+}
+const errorHandler = (err, req, res, next) => {
+    console.error(err.message);
+    if(err.name === 'CastError')
+    {
+        return res.status(400).send({error: 'Malformatted id'})
+    }
+    next(err); //Forwards to default error handler
+}
+app.use(unknownEndpoint);
+app.use(errorHandler);
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
