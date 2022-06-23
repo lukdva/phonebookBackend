@@ -10,7 +10,8 @@
     "deploy": "git push heroku main",
     "build:ui": "rm -rf build && cd ../../fullStackOpenExcercisesLukas/part2/phonebook && npm run build && cp -r build ../../../part3/phonebookBackend",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
-    "logs:prod": "heroku logs --tail"
+    "logs:prod": "heroku logs --tail",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,9 @@
   "homepage": "https://github.com/lukis121/phonebookBackend#readme",
   "devDependencies": {
     "@types/node": "^17.0.44",
+    "eslint": "^8.18.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
     "nodemon": "^2.0.16"
   },
   "dependencies": {
